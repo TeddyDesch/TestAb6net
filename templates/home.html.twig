@@ -1,0 +1,40 @@
+{# Utilisation du squelette de page base.html.twig #}
+{% extends 'base.html.twig' %}
+
+{# Titre de la page #}
+{% block title %}Accueil{% endblock %}
+
+{# Inclusion CSS individuel de la page #}
+{% block stylesheets %}{% endblock %}
+
+{# Contenu de la page d'accueil #}
+{% block body %}
+
+    {# affichage du message flash de success #}
+    {% for message in app.flashes('success') %}
+
+        <div class="alert alert-success text-center col-10 offset-1 my-2">{{ message }}</div>
+
+    {% endfor %}
+
+    <div class="container-fluid">
+
+        <div class="row">
+
+            <div id="title" class="col-12 text-center my-5">
+                <h1>Test Recrutement Ab6net</h1>
+            </div>
+
+
+            <button class="btn btn-success col-2 offset-5 my-2"><a href="{{path('app_login')}}">Connexion</a></button>
+
+            <br>
+            <button class="btn btn-primary col-2 offset-5 my-2"><a href="{{path('register')}}">Inscription</a></button>
+
+
+
+        </div>
+        {% set userConnected = app.user %}
+    </div>
+
+{% endblock %}

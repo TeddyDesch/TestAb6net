@@ -1,0 +1,18 @@
+# See dos how to configure the bundle: https://symfony.com/doc/current/bundles/LiipImagineBundle/basic-usage.html
+liip_imagine:
+    # valid drivers options include "gd" or "gmagick" or "imagick"
+    driver: "gd"
+    filter_sets:
+
+        # Paramétrage de l'affichage de l'image de l'actualité"
+        news:
+            quality: 100
+            filters:
+                scale:
+                    dim: [400, 400]
+
+        detail:
+            quality: 100
+            filters:
+                scale:
+                    dim: [600, 600]

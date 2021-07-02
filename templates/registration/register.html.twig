@@ -1,0 +1,47 @@
+{# Utilisation du squelette de page base.html.twig #}
+{% extends 'base.html.twig' %}
+
+{# Titre de la page #}
+{% block title %}Créer un compte{% endblock %}
+
+{# Contenu de la page #}
+{% block body %}
+
+    <div class="container-fluid">
+
+        <div class="col-4 offset-4 text-center my-3">
+            <h1 class="col-12 text-center mt-2">Inscription</h1>
+            <hr>
+
+
+                {# formulaire d'inscription utilisateurs #}
+                {{ form_start(registrationForm) }}
+                
+                {# Affichage des erreurs générales du formulaire #}
+                {{ form_errors(registrationForm) }}
+                
+                <label for="registration_form_email">Email</label>
+                {{ form_row(registrationForm.email) }}
+                
+                <label for="registration_form_plainPassword_first">Mot de passe</label>
+                {{ form_row(registrationForm.plainPassword) }}
+                
+                <label></label>
+                {{ form_row(registrationForm.save) }}
+
+
+            {{ form_end(registrationForm) }}
+
+        </div>
+
+
+    </div>
+
+{% endblock %}
+
+{# Fichiers CSS individuels de la page #}
+{% block stylesheets %}
+
+    {# Le choix du block stylecheets pour mettre ce fichier CSS n'est pas une erreur car Google préconise d'inclure ce fichier dans le head #}
+    
+{% endblock %}

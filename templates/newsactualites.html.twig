@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Création d'un article{% endblock %}
+
+{% block body %}
+
+
+<div class="container-fluid">
+    
+    <div class="col-4 offset-4 text-center my-3">
+            <h1>Création d'un nouvel article</h1>
+            <hr>
+
+                {# formulaire de création d'une nouvelle actualité #}
+                {{ form_start(newactualitesForm) }}
+                
+                {# Affichage des erreurs générales du formulaire #}
+                {{ form_errors(newactualitesForm) }}
+                
+                <label for="newsactualites_form_title" class="my-2">Titre</label>
+                {{ form_row(newactualitesForm.title) }}
+                
+                <label for="newsactualites_form_contentShort" class="my-2">Résumé court</label>
+                {{ form_row(newactualitesForm.contentShort) }}
+                
+                <label for="newsactualites_form_contentLong" class="my-2">Résumé complet</label>
+                {{ form_row(newactualitesForm.contentLong) }}
+
+                <label for="newsactualites_form_image">Image</label>
+                {{form_row(newactualitesForm.image)}}
+
+                <label class="my-2"></label>
+                {{ form_row(newactualitesForm.save) }}
+
+
+            {{ form_end(newactualitesForm) }}
+
+        </div>
+
+
+    </div>
+
+{% endblock %}
+{% block javascripts %}
+
+
+
+    <script>
+        // code jQuery permettant d'afficher dynamiquement un texte ainsi que le nom du fichier actuellement selectionné dans le champ
+        $('.custom-file-label').text('Choisir un fichier');
+    
+        $('.custom-file-input').change(function(){
+            $(this).next('.custom-file-label').html( $(this).val().replace('C:\\fakepath\\', " "));
+        });
+    </script>
+
+{% endblock %}

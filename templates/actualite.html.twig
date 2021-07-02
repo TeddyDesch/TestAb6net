@@ -1,0 +1,53 @@
+{# Utilisation du squelette de page base.html.twig #}
+{% extends 'base.html.twig' %}
+
+{# Titre de la page #}
+{% block title %}Article en detail{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{# Contenu de la page #}
+{% block body %}
+
+
+
+    <div class="container-fluid">
+
+        
+        <div class="row m-3">
+            
+            <a class="btn btn-danger" href="{{path('actualites')}}">Retour à la liste</a>
+            
+        </div>
+        <div class="col-12 d-flex">
+
+                <div class="col-5 offset-1" >
+                    
+                    <img class="" src="{{ asset('images/' ~ article.image) | imagine_filter('detail') }}" alt="">
+                </div>
+
+                <div class="col-5 offset-1 m-3  ">
+                    <br>
+                    <div class="col-12">
+                        <h1 class="text-center "> <b>{{ article.title }}</b></h1>
+                    </div>
+                    <hr>
+                  
+                    <div class="col-12 book-identity">
+
+                        <p>Résumé court : {{ article.contentShort }}</p>
+                        <p>Résumé long : {{ article.contentLong }}</p>
+
+                    </div>
+
+                </div>
+
+        </div>
+
+        
+
+
+    </div>
+
+{% endblock %}
