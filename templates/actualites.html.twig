@@ -9,7 +9,17 @@
 
 {# Contenu de la page d'accueil #}
 {% block body %}
+
+    {% if app.user %}
     <button class="btn btn-danger m-2"><a href="{{path ('app_logout')}}">Deconnexion</a></button>
+    {% else %}
+
+    <button class="btn btn-success m-2"><a href="{{path('app_login')}}">Connexion</a></button>
+    <button class="btn btn-primary m-2"><a href="{{path('register')}}">Inscription</a></button>
+
+    {% endif %}
+
+
 
 
     {% if is_granted('ROLE_ADMIN') %}
@@ -35,8 +45,10 @@
 
                         <div class="col-12 text-center m-3">
 
+                            {% if articles.startPublication().format('U') < "now"|date('U') and "now"|date('U') < articles.endPublication().format('U')%}
+
                             <div class="col-10 offset-1 text-center">
-                                <img class="" src="{{ asset('images/' ~ articles.image) | imagine_filter('news') }}" alt="">
+                                <img class="" src="{{ asset('images/articles/' ~ articles.image) | imagine_filter('news') }}" alt="">
                             </div>
 
                             <div class="col-10 offset-1  text-center">
@@ -44,7 +56,16 @@
 
                                 <a class="btn btn-success m-1" href="{{path('actualite', {slug: articles.slug}) }}">Voir plus</a>
 
+                                {% if is_granted('ROLE_ADMIN') %}
+                                <a class="btn btn-warning m-1" href="{{path('edit', {id: articles.id}) }}">Modifier</a>
+                                <a class="btn btn-danger m-1" href="{{path('delete', {id: articles.id}) }}">Supprimer</a>
+                                {% endif %}
+
+
                             </div>
+
+                            {% else %}
+                            {% endif %}
 
                         </div>
 

@@ -5,9 +5,12 @@ namespace App\Entity;
 use App\Repository\ArticleRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo; // Importation de la classe permettant de faire un slug
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass=ArticleRepository::class)
+ * @Vich\Uploadable
  */
 class Article
 {
@@ -54,13 +57,39 @@ class Article
     /**
      * @ORM\Column(type="datetime")
      */
-    private $publicationDate;
+    private $addDate;
 
-     /**
-     * @ORM\Column(type="string", length=50)
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $startPublication;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $endPublication;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @var string
      */
     private $image;
 
+    /**
+     * @Vich\UploadableField(mapping="articles", fileNameProperty="image")
+     * @var File
+     */
+    private $imageFile;
+
+    /**
+     * @ORM\Column(type="datetime")
+     * @var \DateTime
+     */
+    private $updatedAt;
+
+    // ...
+
+    
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
@@ -107,29 +136,70 @@ class Article
         return $this;
     }
 
-    public function getPublicationDate(): ?\DateTimeInterface
+    public function getAddDate(): ?\DateTimeInterface
     {
-        return $this->publicationDate;
+        return $this->addDate;
     }
 
-    public function setPublicationDate(\DateTimeInterface $publicationDate): self
+    public function setAddDate(\DateTimeInterface $addDate): self
     {
-        $this->publicationDate = $publicationDate;
+        $this->addDate = $addDate;
 
         return $this;
     }
 
-    public function getImage(): ?string
+    public function getStartPublication(): ?\DateTimeInterface
+    {
+        return $this->startPublication;
+    }
+
+    public function setStartPublication(\DateTimeInterface $startPublication): self
+    {
+        $this->startPublication = $startPublication;
+
+        return $this;
+    }
+
+    public function getEndPublication(): ?\DateTimeInterface
+    {
+        return $this->endPublication;
+    }
+
+    public function setEndPublication(\DateTimeInterface $endPublication): self
+    {
+        $this->endPublication = $endPublication;
+
+        return $this;
+    }
+
+    public function setImageFile(File $image = null)
+    {
+        $this->imageFile = $image;
+
+        // VERY IMPORTANT:
+        // It is required that at least one field changes if you are using Doctrine,
+        // otherwise the event listeners won't be called and the file is lost
+        if ($image) {
+            // if 'updatedAt' is not defined in your entity, use another property
+            $this->updatedAt = new \DateTime('now');
+        }
+    }
+
+    public function getImageFile()
+    {
+        return $this->imageFile;
+    }
+
+    public function setImage($image)
+    {
+        $this->image = $image;
+    }
+
+    public function getImage()
     {
         return $this->image;
     }
 
-    public function setImage(string $image): self
-    {
-        $this->image = $image;
-
-        return $this;
-    }
 
     public function getEditDate(): ?\DateTimeInterface
     {

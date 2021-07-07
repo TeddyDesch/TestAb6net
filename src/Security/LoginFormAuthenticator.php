@@ -52,7 +52,7 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         }
 
         // Redirection de l'utilisateur connecté vers la page d'accueil, qui affichera le message de succès
-        return new RedirectResponse($this->urlGenerator->generate('actualites'));
+        return new RedirectResponse($this->urlGenerator->generate('main'));
     }
 
     protected function getLoginUrl(Request $request): string

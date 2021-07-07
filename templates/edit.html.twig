@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{# Titre de la page #}
+{% block title %}Modification d'un article{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{# Contenu de la page #}
+{% block body %}
+
+
+
+    <div class="container-fluid">
+
+        <div  class="col-10 offset-1 col-md-8 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4 offset-md-2 my-5 p-3 form-block">
+
+            {# Titre h1 #}
+            <div class="row">
+                <h1 class="col-12 text-center">Modification d'un article</h1>
+            </div>
+
+            <hr>
+
+              {# Affichage du formulaire de modification d'article #}
+            <div class="row">
+                <div class="col-12">
+
+                    {# L'attribut action du formulaire doit être généré car ce dernier contient l'id de l'article à modifier #}
+                    {{ form_start(form) }}
+                
+                    {# Affichage des erreurs générales du formulaire #}
+                    {{ form_errors(form) }}
+                    
+                    <label for="newsactualites_form_title" class="my-2">Titre</label>
+                    {{ form_row(form.title) }}
+                    
+                    <label for="newsactualites_form_contentShort" class="my-2">Résumé court</label>
+                    {{ form_row(form.contentShort) }}
+                    
+                    <label for="newsactualites_form_contentLong" class="my-2">Résumé complet</label>
+                    {{ form_row(form.contentLong) }}
+    
+                    <label for="newsactualites_form_imageFile">Image</label>
+                    {{form_row(form.imageFile)}}
+    
+                    <label class="my-2"></label>
+                    {{ form_row(form.save) }}
+    
+    
+                    {{ form_end(form) }}
+    
+                </div>
+            </div>
+
+            <div class="row">
+                <a href="{{ path('main') }}" class="col-6 offset-3 mb-2 btn btn-light">
+                    Retour
+                </a>
+            </div>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+{% endblock %}
+{% block javascripts %}
+
+
+
+<script>
+    // code jQuery permettant d'afficher dynamiquement un texte ainsi que le nom du fichier actuellement selectionné dans le champ
+    $('.custom-file-label').text('Choisir un fichier');
+    
+    $('.custom-file-input').change(function(){
+        $(this).next('.custom-file-label').html( $(this).val().replace('C:\\fakepath\\', " "));
+    });
+    </script>
+
+{% endblock %}

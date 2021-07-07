@@ -17,7 +17,7 @@ use Vich\UploaderBundle\Form\Type\VichImageType;
 
 
 
-class NewsActualitesFormType extends AbstractType
+class EditFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -41,15 +41,13 @@ class NewsActualitesFormType extends AbstractType
                         'max' => 100,   // Taille maximum autorisée
                         'maxMessage' => 'Le titre doit contenir au maximum {{ limit }} caractères'  // Message d'erreur si plus grand
                     ]),
-                ],
-                'attr' => [
-                    'class' => 'col-12 my-2'
                 ]
             ])
             
             ->add('contentShort', TextareaType::class, [
                 // Label du champ
                 'label' => false,
+                
                 // Liste des contraintes du champ
                 'constraints' => [
 
@@ -57,6 +55,7 @@ class NewsActualitesFormType extends AbstractType
                     new NotBlank([
                         'message' => 'Merci de faire un court résumé de l\'article' // Message d'erreur si cette contrainte n'est pas respectée
                         ]),
+
                         // Doit avoir une certaine taille
                         new Length([
                         'min' => 10, // Taille minimum autorisée
@@ -64,9 +63,6 @@ class NewsActualitesFormType extends AbstractType
                         'max' => 255,   // Taille maximum autorisée
                         'maxMessage' => 'Le résumé court doit contenir au maximum {{ limit }} caractères'  // Message d'erreur si plus grand
                     ]),
-                ],
-                'attr' => [
-                    'class' => 'col-12 my-2'
                 ]
             ])
             ->add('contentLong', TextareaType::class, [
@@ -88,20 +84,7 @@ class NewsActualitesFormType extends AbstractType
                         'max' => 10000,   // Taille maximum autorisée
                         'maxMessage' => 'Le résumé court doit contenir au maximum {{ limit }} caractères'  // Message d'erreur si plus grand
                     ]),
-                ],
-                'attr' => [
-                    'class' => 'col-12 my-2'
                 ]
-            ])
-            ->add('startPublication', DateType::class, [
-                'label' => 'Début de publication',
-                'format' => 'dd-MM-yyyy',
-                'years' => range(date('Y'), date('Y')+10),
-            ])
-            ->add('endPublication', DateType::class, [
-                'label' => 'Fin de publication',
-                'format' => 'dd-MM-yyyy',
-                'years' => range(date('Y'), date('Y')+10),
             ])
             ->add('imageFile', VichImageType::class, [
                 'label' => false,

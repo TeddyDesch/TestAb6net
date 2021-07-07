@@ -5,7 +5,8 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     # %kernel.project_dir% = dossier "public"
-    app.user.photos.directory: '%kernel.project_dir%/public/images/'
+    app.user.photos.directory: '%kernel.project_dir%/public/images/articles/'
+    app.path.product_images: /uploads/images/articles
 
 services:
     # default configuration for services in *this* file

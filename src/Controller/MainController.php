@@ -7,8 +7,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Article;
 use App\Form\NewsActualitesFormType;
+use App\Form\EditFormType;
+
 use Symfony\Component\HttpFoundation\Request;
 use \DateTime;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+
 
 
 class MainController extends AbstractController
@@ -18,24 +22,19 @@ class MainController extends AbstractController
      */
     public function index(): Response
     {
-        // Cette page appellera la vue templates/main/index.html.twig
-        return $this->render('home.html.twig');
-    }
-
-
-    /**
-     * @Route("/les-actualites", name="actualites")
-     */
-    public function actualites(): Response
-    {
         $articleRepo = $this->getDoctrine()->getRepository(Article::class);
 
 
         $ArticleList = $articleRepo->findBy([], ['id' => 'DESC']);
 
+
+        
+        
+
         return $this->render('actualites.html.twig', [
-            'ArticleList' => $ArticleList
+            'ArticleList' => $ArticleList,
         ]);
+        
     }
 
     /**
@@ -49,7 +48,7 @@ class MainController extends AbstractController
 
         // Création d'un nouveau formulaire à partir de notre formulaire NewsActualitesFormTypee et de notre nouvel article encore vide
         $form = $this->createForm(NewsActualitesFormType::class, $newArticle);
-        $newArticle->setPublicationDate(new DateTime());
+        $newArticle->setAddDate(new DateTime());
 
 
         $form->handleRequest($request);
@@ -57,31 +56,19 @@ class MainController extends AbstractController
         // Pour savoir si le formulaire a été envoyé, on a accès à cette condition :
             if($form->isSubmitted() && $form->isValid()){
 
-                // Extraction de l'objet de la photo envoyée dans le formulaire
-                $photo = $form->get('image')->getData();
 
-                // Création d'un nouveau nom aléatoire pour la photo avec son extension (récupérée via la méthode guessExtension() )
-                $newFileName = md5(time() . rand() . uniqid() ) . '.' . $photo->guessExtension();
-
-                $newArticle->setImage($newFileName);
-
-                // Déplacement de la photo dans le dossier que l'on avait paramétré dans le fichier services.yaml, avec le nouveau nom qu'on lui a généré
-                $photo->move(
-                    $this->getParameter('app.user.photos.directory'),     // Emplacement de sauvegarde du fichier
-                    $newFileName    // Nouveau nom du fichier
-                );
 
 
                 // récupération du manager des entités et sauvegarde en BDD de $newArticle
                 $em = $this->getDoctrine()->getManager();
-                
+
                 $em->persist($newArticle);
-                
+
                 $em->flush();
-            
+
                 // Si le formulaire a été envoyé, on dump notre article, qui est pré-rempli automatiquement avec les données provenant du formulaire !
 
-                return $this->redirectToRoute('actualites');
+                return $this->redirectToRoute('main');
 
             } 
 
@@ -103,6 +90,65 @@ class MainController extends AbstractController
         return $this->render('actualite.html.twig', [
             'article' => $article,
         ]);
+    }
+
+     /**
+     * Page admin servant à supprimer un article via son id passé dans l'url
+     *
+     * @Route("/suppression/{id}/", name="delete")
+     * @Security("is_granted('ROLE_ADMIN')")
+     */
+    public function delete(Article $article, Request $request): Response
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($article);
+        $em->flush();
+
+        // Redirection de l'utilisateur sur la liste des articles
+        return $this->redirectToRoute('main');
+    }
+
+    /**
+     * Page admin permettant de modifier un article existant via son id passé dans l'url
+     *
+     * @Route("/modifier/{id}/", name="edit")
+     * @Security("is_granted('ROLE_ADMIN')")
+     */
+    public function publicationEdit(Article $article, request $request): Response
+    {
+        // Création du formulaire de modification de livre 
+        $form = $this->createForm(EditFormType::class, $article);
+        if($article->getImage() != null){
+
+            // Suppression de l'ancienne photo
+            unlink($this->getParameter('app.user.photos.directory') . $article->getImage());
+            }dump($article);
+        // Liaison des données de requête (POST) avec le formulaire
+        $form->handleRequest($request);
+
+        // Si le formulaire est envoyé et n'a pas d'erreur
+        if($form->isSubmitted() && $form->isValid()){
+
+
+            
+
+            // Sauvegarde des changements faits dans l'article via le manager général des entités
+            $em = $this->getDoctrine()->getManager();
+            $em->flush();
+
+
+            // Redirection vers la page de l'article modifié
+            return $this->redirectToRoute('main');
+
+        }
+
+        // Appel de la vue en lui envoyant le formulaire à afficher
+        return $this->render('edit.html.twig', [
+            'form' => $form->createView(),
+            'article' => $article
+        ]);
+
     }
 
 }

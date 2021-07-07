@@ -26,8 +26,13 @@
                 <label for="newsactualites_form_contentLong" class="my-2">Résumé complet</label>
                 {{ form_row(newactualitesForm.contentLong) }}
 
-                <label for="newsactualites_form_image">Image</label>
-                {{form_row(newactualitesForm.image)}}
+                {{ form_row(newactualitesForm.startPublication) }}
+
+                {{ form_row(newactualitesForm.endPublication) }}
+
+
+                <label for="newsactualites_form_imageFile" class="my-2">Image</label>
+                {{form_row(newactualitesForm.imageFile)}}
 
                 <label class="my-2"></label>
                 {{ form_row(newactualitesForm.save) }}
